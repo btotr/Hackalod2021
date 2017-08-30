@@ -1,7 +1,14 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "Model.h"
+#include "SerialView.h"
 
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
+
+class SerialView dview;
 
 enum events { newConnection };
 volatile int connections; // used to hold the connections
@@ -10,6 +17,7 @@ WiFiServer server(80);
 
 void Model::init() {
 	server.begin();
+	dview.init();
 }
 
 int Model::getConnections() {
@@ -20,16 +28,18 @@ String  Model::getServerIp(){
     return String(WiFi.localIP().toString().c_str());   
 }
 
-String Model::getHTML() {
+String Model::getHTML(String answer) {
   return String("HTTP/1.1 200 OK\r\n") +
-    "Content-Type: text/html\r\n" +
-    "Connection: close\r\n" +  // the connection will be closed after completion of the response
-    "Refresh: 5\r\n" +  // refresh the page automatically every 5 sec
+    "Content-Type: text/plain\r\n" +
+    "Connection: close\r\n" + 
     "\r\n" +
-    "<html>" +
-    "hoipipelepoi" +
-    "</html>" +
+    answer +
     "\r\n";
+}
+
+String Model::parseRequest(String request) {
+  dview.debug("requesting" + request);
+  return request;
 }
 
 void Model::update() {
@@ -38,12 +48,20 @@ void Model::update() {
   if (client) {
   	connections++;
   	this->emit(this->newConnection);
+  	dview.debug("requesting");
   	while (client.connected()) {
       // read line by line what the client (web browser) is requesting
       if (client.available()) {
         String line = client.readStringUntil('\r');
+        dview.debug(line);
+        
+        String answer = "";
+        if (line.startsWith("GET")) {
+          answer = this->parseRequest(line);
+        }
+        
         if (line.length() == 1 && line[0] == '\n') {
-          client.println(getHTML());
+          client.println(this->getHTML(answer));
           break;
         }
       }

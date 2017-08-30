@@ -26,7 +26,6 @@ void setup() {
     wifi.on(WIFI::wifiConnecting, wifiConnectingCallback);
     wifi.on(WIFI::wifiConnected, wifiConnectedCallback);
     wifi.setup();
-    
 }
 
 void loop() {
