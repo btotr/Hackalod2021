@@ -16,6 +16,10 @@ int Model::getConnections() {
 	return connections;
 }
 
+String  Model::getServerIp(){
+    return String(WiFi.localIP().toString().c_str());   
+}
+
 String Model::getHTML() {
   return String("HTTP/1.1 200 OK\r\n") +
     "Content-Type: text/html\r\n" +
@@ -53,11 +57,6 @@ void Model::update() {
 
 
 // events
-
-
-void Model::on(int event, std::function<void()> c) {
-	callbacks.push_back(std::make_pair(c, event));
-};
 
 void Model::on(events event, std::function<void()> c) {
 	callbacks.push_back(std::make_pair(c, static_cast<int>(event)));

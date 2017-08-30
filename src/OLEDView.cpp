@@ -2,17 +2,17 @@
 #include "OLEDView.h"
 #include "SSD1306.h"
 
+// API: https://github.com/squix78/esp8266-oled-ssd1306
+
 SSD1306 display(0x3c, D2, D1);
 
 void OLEDView::init() 
 {
 	display.init();
-	display.setFont(ArialMT_Plain_24);
-	display.setTextAlignment(TEXT_ALIGN_CENTER_BOTH);
+	display.setFont(ArialMT_Plain_10);
+	display.setTextAlignment(TEXT_ALIGN_LEFT);
 	display.flipScreenVertically();
 }
-
-
 
 void OLEDView::printConnections(int connections) 
 {

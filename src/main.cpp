@@ -1,34 +1,32 @@
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
 #include <OLEDView.h>
 #include <Model.h>
+#include <WIFI.h>
 
 class OLEDView view;
 class Model model;
+class WIFI wifi;
 
-const char* ssid = "meerveld 2.4g";
-const char* password = "?";
-
-void callback() {
+void newConnectionCallback() {
 	view.printConnections(model.getConnections());
 }
 
-void setupWifi() {
-    WiFi.begin(ssid, password);
-    // wait until we have a connection
-	while (WiFi.status() != WL_CONNECTED) {
-    	delay(2000);
-    	view.debug("connecting to WIFI ...");
-	}
-	view.debug(WiFi.localIP().toString().c_str());
+void wifiConnectingCallback() {
+    view.debug("Connecting to WIFI...");
 }
 
+void wifiConnectedCallback() {
+    model.init();
+    model.on(Model::newConnection, newConnectionCallback);
+	view.debug(model.getServerIp());
+}
 
 void setup() {
     view.init();
-    setupWifi();
-    model.init();
-    model.on(Model::newConnection, callback);
+    wifi.on(WIFI::wifiConnecting, wifiConnectingCallback);
+    wifi.on(WIFI::wifiConnected, wifiConnectedCallback);
+    wifi.setup();
+    
 }
 
 void loop() {
