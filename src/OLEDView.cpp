@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include "OLEDView.h"
-#include "SSD1306.h"
+#include "SSD1306Wire.h"
 
 // API: https://github.com/squix78/esp8266-oled-ssd1306
 
-SSD1306 display(0x3c, D2, D1);
+SSD1306Wire display(0x3c, D2, D1);
 
 void OLEDView::init() 
 {
