@@ -28,12 +28,12 @@ String  Model::getServerIp(){
     return String(WiFi.localIP().toString().c_str());   
 }
 
-String Model::getHTML(String answer) {
+String Model::getHTML(String t) {
   return String("HTTP/1.1 200 OK\r\n") +
     "Content-Type: text/plain\r\n" +
     "Connection: close\r\n" + 
     "\r\n" +
-    answer +
+    t +
     "\r\n";
 }
 
@@ -49,23 +49,9 @@ void Model::update() {
   	connections++;
   	this->emit(this->newConnection);
   	dview.debug("requesting");
-  	while (client.connected()) {
-      // read line by line what the client (web browser) is requesting
-      if (client.available()) {
-        String line = client.readStringUntil('\r');
-        dview.debug(line);
-        
-        String answer = "";
-        if (line.startsWith("GET")) {
-          answer = this->parseRequest(line);
-        }
-        
-        if (line.length() == 1 && line[0] == '\n') {
-          client.println(this->getHTML(answer));
-          break;
-        }
-      }
-    }
+
+        client.println(this->getHTML("test"));
+
     delay(1);
     // close the connection:
     client.stop();
