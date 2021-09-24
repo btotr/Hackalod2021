@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include "Model.h"
 #include "SerialView.h"
+#include "../lib/geo.h"
 
 #include <string>
 #include <sstream>
@@ -49,9 +50,7 @@ void Model::update() {
   	connections++;
   	this->emit(this->newConnection);
   	dview.debug("requesting");
-
-        client.println(this->getHTML("test"));
-
+    client.println(this->getHTML(locationToWGS84(5, 10)));
     delay(1);
     // close the connection:
     client.stop();
