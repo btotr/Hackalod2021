@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "Model.h"
-#include "SerialView.h"
+#include "OLEDView.h"
 #include "../lib/geo.h"
 
 #include <string>
@@ -9,7 +9,7 @@
 #include <vector>
 #include <iterator>
 
-class SerialView dview;
+class OLEDView dview;
 
 enum events { newConnection };
 volatile int connections; // used to hold the connections

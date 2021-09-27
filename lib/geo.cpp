@@ -7,17 +7,12 @@
 
 float round6(float var)
 {
-    // 37.66666 * 100 =3766.66
-    // 3766.66 + .5 =3767.16    for rounding off value
-    // then type cast to int so value is 3767
-    // then divided by 100 so the value converted into 37.67
     float value = (int)(var * 1000000 + .5);
     return (float)value / 1000000;
 }
 
 std::string locationToWGS84(int x, int y) {
 
-    // The city "Amsterfoort" is used as reference "Rijksdriehoek" coordinate.
     int referenceRdX = 155000;
     int referenceRdY = 463000;
 
@@ -51,7 +46,6 @@ std::string locationToWGS84(int x, int y) {
       (-0.00022 * (pow(dX,2))) +
       (0.00026 * (pow(dX,5)));
 
-    // The city "Amsterfoort" is used as reference "WGS84" coordinate.
     double referenceWgs84X = 52.15517;
     double referenceWgs84Y = 5.387206;
 
@@ -59,8 +53,6 @@ std::string locationToWGS84(int x, int y) {
     double longitude = referenceWgs84Y + (sumE / 3600);
     
     std::string latlong = std::to_string(round6(latitude)) + " " +  std::to_string(round6(longitude));
-    
-      
 
     return latlong;
 }
