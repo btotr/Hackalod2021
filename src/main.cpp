@@ -1,14 +1,14 @@
 #include <Arduino.h>
-#include <SerialView.h>
+#include <OLEDView.h>
 #include <Model.h>
 #include <WIFI.h>
 
-class SerialView view;
+class OLEDView view;
 class Model model;
 class WIFI wifi;
 
 void newConnectionCallback() {
-	view.printConnections(model.getConnections());
+	//view.printConnections(model.getConnections());
 }
 
 void wifiConnectingCallback() {
@@ -23,7 +23,6 @@ void wifiConnectedCallback() {
 
 void setup() {
     view.init();
-    view.debug("test");
     wifi.on(WIFI::wifiConnecting, wifiConnectingCallback);
     wifi.on(WIFI::wifiConnected, wifiConnectedCallback);
     wifi.setup();

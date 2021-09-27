@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 #include "Model.h"
 #include "OLEDView.h"
-#include "../lib/geo.h"
+#include "geo.h"
 
 #include <string>
 #include <sstream>
@@ -10,9 +10,12 @@
 #include <iterator>
 
 class OLEDView dview;
+class GEO geo;
 
 enum events { newConnection };
 volatile int connections; // used to hold the connections
+
+
 
 WiFiServer server(80);
 
@@ -30,18 +33,17 @@ String  Model::getServerIp(){
 }
 
 String Model::getHTML(String t) {
+   int x = 121687;
+    int y = 487484;
   return String("HTTP/1.1 200 OK\r\n") +
     "Content-Type: text/plain\r\n" +
-    "Connection: close\r\n" + 
+    "Refresh: 5\r\n" +
     "\r\n" +
     t +
+    geo.locationToWGS84(x, y).c_str() +
     "\r\n";
 }
 
-String Model::parseRequest(String request) {
-  dview.debug("requesting" + request);
-  return request;
-}
 
 void Model::update() {
   WiFiClient client = server.available();
@@ -49,8 +51,8 @@ void Model::update() {
   if (client) {
   	connections++;
   	this->emit(this->newConnection);
-  	dview.debug("requesting");
-    client.println(this->getHTML(locationToWGS84(5, 10)));
+  	//dview.debug("requesting" + geo.locationToWGS84(x, y).c_str());
+    client.println(this->getHTML("test: "));
     delay(1);
     // close the connection:
     client.stop();
