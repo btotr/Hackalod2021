@@ -4,6 +4,6 @@
 class AbstractView {
 	public:
 		void init();
-		void printConnections(int connections);
+		void show(String message);
 		void debug(String message);
 };

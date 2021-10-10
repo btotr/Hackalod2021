@@ -5,7 +5,7 @@
 class Model : Event {
 	public:
 		void init();
-		enum events { newConnection };
+		enum events { waiting };
 		void on(events event, std::function<void()> c);
 		void emit(int event);
 		void update();
@@ -13,4 +13,5 @@ class Model : Event {
 		String parseRequest(String line);
 		int getConnections();
 		String getServerIp();
+		String getCoordinates();
 };

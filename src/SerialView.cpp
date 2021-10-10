@@ -1,18 +1,23 @@
 #include <Arduino.h>
 #include "SerialView.h"
 
+
+
 void SerialView::init()
 {
-      Serial.begin(9600);
+      Serial.begin(115200);
 }
 
-void SerialView::printConnections(int connections) 
+void SerialView::show(String message) 
 {
-	 Serial.println(connections);
+	 Serial.println(message);
 }
 
 
 void SerialView::debug(String message)
 {
-    Serial.println(message);
+    bool debugb = true;
+    if (debugb) {
+        Serial.println(message);
+    }
 }

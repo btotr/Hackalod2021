@@ -4,7 +4,7 @@
 
 // API: https://github.com/squix78/esp8266-oled-ssd1306
 
-SSD1306Wire display(0x3c, D2, D1);
+SSD1306Wire display(0x3c, D2, D1);  // ADDRESS, SDA, SCL
 
 void OLEDView::init() 
 {
@@ -14,16 +14,19 @@ void OLEDView::init()
 	display.flipScreenVertically();
 }
 
-void OLEDView::printConnections(int connections) 
+void OLEDView::show(String message) 
 {
 	display.clear();
-	display.drawString(10, 10, String(connections));
+	display.drawString(10, 10, message);
 	display.display();
 }
 
 void OLEDView::debug(String message)
 {
-	display.clear();
-	display.drawString(10, 10, message);
-	display.display();
+    bool debugb = true;
+    if(debugb){
+	    display.clear();
+	    display.drawString(10, 10, message);
+	    display.display();
+	}
 }
