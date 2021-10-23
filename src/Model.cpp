@@ -46,17 +46,6 @@ void Model::init() {
     AsyncElegantOTA.begin(&server);
 	server.begin();
 	
-	/*pinMode(trigPin1, OUTPUT);
-	pinMode(echoPin1, INPUT);
-	pinMode(trigPin2, OUTPUT);
-	pinMode(echoPin2, INPUT);*/
-    //srf1.setModeSingle();
-	//srf2.setModeSingle();
-	//srf1.setSpeedOfSound(340.5);
-	//srf2.setSpeedOfSound(340.5);
-	//srf1.setCorrectionFactor(1.035);
-	//srf2.setCorrectionFactor(1.035);
-	
 }
 
 int Model::getConnections() {
@@ -92,8 +81,6 @@ String Model::getCoordinates() {
     }
     
     
-    
-    
     float c = 50; // distance between sensors
     float lx = (pow(c, 2) + pow(b, 2) - pow(a, 2))/(2*c) + correctionx;
     float ly = sqrt((pow(b, 2) - pow(lx,2))) + correctiony;
@@ -118,22 +105,6 @@ String Model::getCoordinates() {
 
 
 void Model::update() {
-  //* WiFiClient client = server.available();
-  // wait for a client (web browser) to connect
-  //if (client) {
-  //	connections++;
-  //	this->emit(this->newConnection);
-  //	int x = 121687;
-  //  int y = 487484;
-  //	String body = String(geo.locationToWGS84(x, y).c_str()) + 
-  //	"\r\n" + String(this->getCoordinates()) ;
-  //	
-  //  client.println(this->getHTML(body));
- //   delay(1);
- //   // close the connection:
- //   client.stop();
- // }
-
   AsyncElegantOTA.loop();
 }
 
