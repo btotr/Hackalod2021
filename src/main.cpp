@@ -36,6 +36,6 @@ void setup() {
 void loop() {
     model.update();
     serialView.debug(model.getCoordinates());
-    delay(5000);
+    delay(1000);
 
 }

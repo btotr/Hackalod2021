@@ -17,6 +17,9 @@ class GEO geo;
 
 enum events { waiting };
 volatile int connections;
+String latlon;
+
+#define SOUND_SPEED 0.034
 
 
 const int echoPin1 = 14;  //D5 Or GPIO-14 of nodemcu
@@ -37,14 +40,22 @@ void Model::init() {
       //this->emit(this->waiting);
     }
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-        String coordinates = "test";
-        request->send(200, "text/plain", coordinates);
+        request->send(200, "text/plain", latlon);
     });
       
     AsyncElegantOTA.begin(&server);
 	server.begin();
-    srf1.setCorrectionFactor(1.035);
-	srf2.setCorrectionFactor(1.035);
+	
+	/*pinMode(trigPin1, OUTPUT);
+	pinMode(echoPin1, INPUT);
+	pinMode(trigPin2, OUTPUT);
+	pinMode(echoPin2, INPUT);*/
+    //srf1.setModeSingle();
+	//srf2.setModeSingle();
+	//srf1.setSpeedOfSound(340.5);
+	//srf2.setSpeedOfSound(340.5);
+	//srf1.setCorrectionFactor(1.035);
+	//srf2.setCorrectionFactor(1.035);
 	
 }
 
@@ -66,16 +77,43 @@ String Model::getHTML(String body) {
 }
 
 String Model::getCoordinates() {
-    int correction = 5;
-    float a = srf1.getCentimeter();
-    float b = srf2.getCentimeter() + correction;
-    float c = 50; 
-    float x = (pow(c, 2) + pow(b, 2) - pow(a, 2))/(2*c);
-    float y = sqrt((pow(b, 2) - pow(x,2)));
-    
-    String distance = String(a) + ", " + String(b) + " , x:" + String(x) + " y:" + String(y);
+    // get local coordinates
 
-    return distance;
+    int correctionx = -4;
+    int correctiony = -9;
+    float a = 500;
+    float b = 500;
+
+
+    while(a>200 || b>200){
+         a = srf1.getCentimeter() ;
+         b = srf2.getCentimeter() /2 ;
+         delay(500);
+    }
+    
+    
+    
+    
+    float c = 50; // distance between sensors
+    float lx = (pow(c, 2) + pow(b, 2) - pow(a, 2))/(2*c) + correctionx;
+    float ly = sqrt((pow(b, 2) - pow(lx,2))) + correctiony;
+    
+    // translate to RD
+    float RDx2 = 167714; // knooppunt 99 Gelderland
+    float RDx1 = 141035; // knooppunt 99 Utrecht
+    float RDy2 = 475480; // knooppunt 37 Flevoland
+    float RDy1 = 450602; // knooppunt 70 Utrecht
+    
+    float RDx = (((RDx2 - RDx1)/c)*lx)+RDx1;
+    float RDy = (((RDy2 - RDy1)/c)*ly)+RDy1;
+    
+    // translate to WGS84
+     latlon = geo.locationToWGS84(RDx, RDy).c_str();
+    //String debug = "d1: " +String(d1)+" d2: "+String(d2)+" da:" + String(a) + ", db:" + String(b) + " , lx:" + String(lx) + " ly:" + String(ly) + " rdx:" + String(RDx) + " rdy:" + String(RDy) + " latlon: " + latlon;
+
+    
+
+    return latlon;
 }
 
 
