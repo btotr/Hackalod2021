@@ -16,7 +16,6 @@
 class GEO geo;
 
 enum events { waiting };
-volatile int connections;
 String latlon;
 
 #define SOUND_SPEED 0.034
@@ -48,21 +47,8 @@ void Model::init() {
 	
 }
 
-int Model::getConnections() {
-	return connections;
-}
-
 String  Model::getServerIp(){
     return String(WiFi.localIP().toString().c_str());   
-}
-
-String Model::getHTML(String body) {
-  return String("HTTP/1.1 200 OK\r\n") +
-    "Content-Type: text/plain\r\n" +
-    "Connection: close\r\n"
-    "\r\n" +
-    body +
-    "\r\n";
 }
 
 String Model::getCoordinates() {
@@ -107,11 +93,6 @@ String Model::getCoordinates() {
 void Model::update() {
   AsyncElegantOTA.loop();
 }
-
-
-
-
-
 
 // events
 
